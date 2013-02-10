@@ -15,8 +15,8 @@ def make_salt():
         salt = salt + random.choice(string.ascii_letters)
     return salt
 
-# implement the function make_pw_hash(name, pw) that returns a hashed password 
-# of the format: 
+# implement the function make_pw_hash(name, pw) that returns a hashed password
+# of the format:
 # HASH(pw + salt),salt
 # use sha256
 
@@ -26,7 +26,7 @@ def make_pw_hash(pw,salt=None):
     return hashlib.sha256(pw + salt).hexdigest()+","+ salt
 
 
-# validates that the user information is valid, return True of False 
+# validates that the user information is valid, return True of False
 # and fills in the error codes
 def validate_signup(username, password, verify, email, errors):
     USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
@@ -37,7 +37,7 @@ def validate_signup(username, password, verify, email, errors):
     errors['password_error'] = ""
     errors['verify_error'] = ""
     errors['email_error'] = ""
-    
+
 
     if not USER_RE.match(username):
         errors['username_error']  = "invalid username. try just letters and numbers"
@@ -66,7 +66,7 @@ def validate_login(connection, username, password, user_record):
     user = None  # this is here to make sure your code does not crash BEFORE you complete assignment
 
     try:
-        # STUDENTS: FILL IN THE NEXT LINE OF CODE. THE TASK IS TO QUERY THE USERS COLLECTION 
+        # STUDENTS: FILL IN THE NEXT LINE OF CODE. THE TASK IS TO QUERY THE USERS COLLECTION
         # COLLECTION USING THE find_one METHOD, QUERYING FOR A USER WHO'S _id IS THE username
         # PASSED INTO VALIDATE LOGIN. ASSIGN THER RESULT TO A VARIABLE CALLED user
         # XXX
@@ -75,7 +75,7 @@ def validate_login(connection, username, password, user_record):
 
         # YOUR WORK HERE XXX
         # user = (just a suggestion)
-
+        user = users.find_one({'_id': username})
         # END OF STUDENT WORK
     except:
         print "Unable to query database for user"
@@ -84,7 +84,7 @@ def validate_login(connection, username, password, user_record):
     if user == None:
         print "User not in database"
         return False
-    
+
     salt = user['password'].split(',')[1]
 
 
@@ -123,7 +123,7 @@ def end_session(connection, session_id):
         id = bson.objectid.ObjectId(session_id)
         sessions.remove({'_id':id})
     except:
-        
+
         return
 
 
@@ -171,6 +171,7 @@ def newuser(connection, username, password, email):
         # XXX YOUR WORK HERE
         print "about to insert a user"
         # users.SOMETHING     (just a suggestion)
+        users.insert(user)
 
     except pymongo.errors.OperationFailure:
         print "oops, mongo error"
