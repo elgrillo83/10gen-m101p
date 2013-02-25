@@ -1,0 +1,7 @@
+Performance
+Index Creation option, Unique
+db.students.ensureIndex({student_id: 1, class_id: 1}, {unique: true})
+Index Creation, Removing Duplicates
+db.things.ensureIndex({thing: 1}, {unique: true, dropDubs: true})
+Index Creation, Sparse
+db.
