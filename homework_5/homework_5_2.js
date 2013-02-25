@@ -1,4 +1,4 @@
-use hw5
+use 10gen
 db.zips.aggregate([
   {
     $match: {
@@ -7,13 +7,19 @@ db.zips.aggregate([
   },
   {
     $group: {
-      _id: {city: "$city", zip_code: "$_id"},
+      _id: {city: "$city", state: "$state"},
+      pop: {$sum: "$pop"}
     }
   },
-  // {
-  //   $project: {
-  //     _id: 1,
-  //     pop: 1
-  //   }
-  // }
+  {
+    $match: {
+      pop: {$gt: 25000}
+    }
+  },
+  {
+    $group: {
+      _id: null,
+      avg: {$avg: "$pop"}
+    }
+  }
 ])
